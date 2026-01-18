@@ -1,0 +1,5 @@
+Pathway is a powerful framework for real-time data processing and streaming applications.
+It enables developers to build RAG (Retrieval-Augmented Generation) pipelines with ease.
+The framework supports live document ingestion without requiring server restarts.
+DataQuest 2026 Hackathon is a competition focused on innovative data processing solutions.
+Real-time RAG systems can answer questions based on documents as they are added to the system.
