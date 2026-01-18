@@ -2,6 +2,7 @@ import os
 import pathway as pw
 from pathway.xpacks.llm import embedders, llms, parsers, splitters
 from pathway.xpacks.llm.document_store import DocumentStore
+from pathway.xpacks.llm.question_answering import RAGQuestionAnswerer
 from pathway.xpacks.llm.servers import PathwayWebserver
 from dotenv import load_dotenv
 from news_connector import fetch_news_stream
@@ -57,8 +58,40 @@ llm = llms.GeminiChat(
     temperature=0.7,
 )
 
-# Create the RAG application
-app = doc_store.search_app(llm=llm)
+# Define custom system prompt for Real-Time News Analyst
+system_prompt = """You are a Real-Time News Analyst powered by live news streams from NewsAPI.
+
+Your role and responsibilities:
+- Answer questions ONLY using the provided context from recent news articles
+- If the context is empty or insufficient, respond: "I have no recent news on this topic."
+- Always mention the publication date of news when available
+- Cite news sources when referencing information
+- Be concise, factual, and objective
+- Do not speculate or add information beyond what's provided in the context
+- Focus on the most recent and relevant information
+
+Context format:
+- Each article contains: title, description, source name, publication date, and category
+- Articles are from technology and business news categories
+- Information is updated every 60 seconds
+
+Guidelines:
+- When answering, reference the source (e.g., "According to TechCrunch...")
+- Mention dates to provide temporal context (e.g., "As of January 18, 2026...")
+- If multiple sources discuss the same topic, synthesize the information
+- Maintain transparency about what you know and don't know
+"""
+
+# Create RAG Question Answerer with custom system prompt
+question_answerer = RAGQuestionAnswerer(
+    llm=llm,
+    indexer=doc_store,
+    system_prompt=system_prompt,
+    search_topk=5,  # Retrieve top 5 most relevant articles
+)
+
+# Create the application with the question answerer
+app = question_answerer.build_app()
 
 # Launch the PathwayWebserver
 server = PathwayWebserver(
@@ -70,14 +103,21 @@ print("🚀 Real-Time RAG Server with Live News Stream!")
 print("📡 Data Source: NewsAPI.org (Technology & Business)")
 print("🌐 API Endpoint: http://localhost:8000")
 print("🤖 AI Model: Gemini 1.5 Flash + text-embedding-004")
-print("\n💡 Test the API with:")
-print('   curl -X POST http://localhost:8000/v1/pw_ai_answer \\')
+print("📝 Custom System Prompt: Real-Time News Analyst")
+print("\n💡 Test the Chat Endpoint:")
+print('   curl -X POST http://localhost:8000/v1/chat \\')
 print('     -H "Content-Type: application/json" \\')
 print('     -d \'{"prompt": "What is the latest technology news?"}\'')
+print("\n📋 Features:")
+print("   ✅ Context-only answers")
+print("   ✅ Source attribution")
+print("   ✅ Publication dates included")
+print("   ✅ Transparent responses")
 print("\n✨ Live news articles are fetched every 60 seconds!")
 print("\n⏳ Starting server and news connector...\n")
 
 # Run the server with the RAG application
 server.run(app)
+
 
 

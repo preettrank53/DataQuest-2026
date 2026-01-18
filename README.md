@@ -95,20 +95,34 @@ curl -X POST http://localhost:8000/v1/pw_ai_answer \
 
 ```bash
 # Latest tech news
-curl -X POST http://localhost:8000/v1/pw_ai_answer \
+curl -X POST http://localhost:8000/v1/chat \
   -H "Content-Type: application/json" \
   -d '{"prompt": "What are the top technology stories today?"}'
 
 # Business news
-curl -X POST http://localhost:8000/v1/pw_ai_answer \
+curl -X POST http://localhost:8000/v1/chat \
   -H "Content-Type: application/json" \
   -d '{"prompt": "Tell me about recent business developments"}'
 
 # Specific topics
-curl -X POST http://localhost:8000/v1/pw_ai_answer \
+curl -X POST http://localhost:8000/v1/chat \
   -H "Content-Type: application/json" \
   -d '{"prompt": "What is happening with AI and machine learning?"}'
+
+# Test context handling
+curl -X POST http://localhost:8000/v1/chat \
+  -H "Content-Type: application/json" \
+  -d '{"prompt": "What news is there about SpaceX?"}'
 ```
+
+### NEW: Phase 3 Features (Generation Layer)
+
+**Custom System Prompt**: Real-Time News Analyst
+- ✅ Context-only responses (no hallucination)
+- ✅ Source attribution in answers
+- ✅ Publication dates mentioned
+- ✅ Graceful handling of missing information
+- ✅ Transparent about knowledge boundaries
 
 ## 🧪 Testing
 
