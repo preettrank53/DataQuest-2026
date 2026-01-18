@@ -93,6 +93,11 @@ question_answerer = RAGQuestionAnswerer(
 # Create the application with the question answerer
 app = question_answerer.build_app()
 
+# Add health check endpoint
+@app.get("/health")
+def health_check():
+    return {"status": "healthy", "service": "dataquest-rag-backend"}
+
 # Launch the PathwayWebserver
 server = PathwayWebserver(
     host="0.0.0.0",

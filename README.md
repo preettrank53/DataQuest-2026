@@ -62,7 +62,65 @@ NEWS_API_KEY=your_news_api_key_here
 
 > **⚠️ IMPORTANT**: Never commit your `.env` file to Git. It's already in `.gitignore`.
 
-## 🚀 Usage
+## 🐳 Docker Deployment (Recommended for Windows)
+
+**Phase 4: Solves Pathway Windows Installation Issues!**
+
+### Prerequisites
+
+1. Install [Docker Desktop for Windows](https://www.docker.com/products/docker-desktop)
+2. Ensure Docker Desktop is running (check system tray)
+
+### Quick Start
+
+```bash
+# 1. Navigate to project directory
+cd DataQuest-2026
+
+# 2. Build containers
+docker-compose build
+
+# 3. Start all services
+docker-compose up
+```
+
+**Access Points**:
+- 🌐 **Frontend (Streamlit)**: http://localhost:8501
+- 🔧 **Backend API**: http://localhost:8000
+
+### Docker Commands
+
+```bash
+# Start in detached mode (background)
+docker-compose up -d
+
+# View logs
+docker-compose logs -f
+
+# Stop all services
+docker-compose down
+
+# Rebuild and restart
+docker-compose up --build
+```
+
+### What's Running?
+
+- **Backend Container**: Linux-based Python environment with Pathway (fixes Windows issues)
+- **Frontend Container**: Streamlit web interface for live demos
+- **Auto-refresh**: Frontend polls backend every 5 seconds for real-time updates
+
+### 🎯 Using the Frontend
+
+1. Open http://localhost:8501 in your browser
+2. Enter a question (e.g., "What is the latest technology news?")
+3. Click "🚀 Ask"
+4. View answer with sources and publication dates
+5. Enable "🔄 Auto-Refresh" for live demo mode
+
+---
+
+## 🚀 Manual Usage (Without Docker)
 
 ### Start the Server
 
